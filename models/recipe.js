@@ -19,15 +19,63 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'RecipeId'
       })
     }
+
+    toCalories() {
+      return `${this.calories} calories`
+    }
   };
   Recipe.init({
-    name: DataTypes.STRING,
-    cookingTime: DataTypes.INTEGER,
-    calories: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Food name field required!'
+        }
+      }
+    },
+    cookingTime: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'Cooking time field required!'
+        },
+        min: {
+          args: 5,
+          msg: 'minimal time is 5'
+        }
+      }
+    },
+    calories: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'Calories field required!'
+        }
+      }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'UserId field required!'
+        }
+      }
+    },
+    urlLink: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Url link field required!'
+        },
+        isUrl: {
+          msg: 'Url must be valid'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Recipe',
   });
+
   return Recipe;
 };

@@ -20,9 +20,34 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   RecipeIngredient.init({
-    amount: DataTypes.INTEGER,
-    RecipeId: DataTypes.INTEGER,
-    IngredientId: DataTypes.INTEGER
+    amount: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'amount field required!'
+        },
+        min: {
+          args: 1,
+          msg: 'amount must be more than 1'
+        }
+      }
+    },
+    RecipeId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'RecipeId cant be empty!'
+        }
+      }
+    },
+    IngredientId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'IngredientId cant be empty!'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'RecipeIngredient',
