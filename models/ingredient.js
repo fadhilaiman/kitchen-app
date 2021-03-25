@@ -18,7 +18,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Ingredient.init({
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Ingredient name field is required!'
+        }
+      }
+    },  
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'UserId cant be empty'
+        }
+      }
+    } 
   }, {
     sequelize,
     modelName: 'Ingredient',

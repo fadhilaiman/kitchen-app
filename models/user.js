@@ -1,4 +1,7 @@
 'use strict';
+
+let bcrypt = require('bcryptjs');
+
 const {
   Model
 } = require('sequelize');
@@ -17,11 +20,37 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   User.init({
-    username: DataTypes.STRING,
-    password: DataTypes.STRING
+    username: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'username field required'
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'password field required'
+        },
+        checkLengthPassword(value) {
+          if (value.length < 4) {
+            throw new Error('Please fill password more than 4 characters!');
+          }
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',
+  });
+
+  User.beforeCreate((user, options) => {
+    
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(user.password, salt);
+    user.password = hash;
   });
   return User;
 };
